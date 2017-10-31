@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`>>>R E D U C E R --- Test calculatorReducers +++ reducer with shapshot 1`] = `
+Object {
+  "output": 0,
+}
+`;
+
+exports[`>>>R E D U C E R --- Test calculatorReducers +++ reducer with shapshot 2`] = `
+Object {
+  "output": 50,
+}
+`;

@@ -1,60 +1,69 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import {connect} from 'react-redux'
-import {addInputs, subtractInputs} from '../actions/calculatorActions'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import {
+  addInputs,
+  subtractInputs,
+  async_addInputs
+} from '../actions/calculatorActions';
 
-const mapStateToProps = (state) => ({
-  output:state.output
-})
+const mapStateToProps = ({ output }) => ({
+  output
+});
 
+export class Home extends React.Component {
+  state = {
+    num1: 0,
+    num2: 0
+  };
 
-export class Home extends React.Component{
-	render(){
-		let IntegerA,IntegerB,IntegerC,IntegerD;
+  changeHandle = (num, value) => {
+    this.setState({ [num]: value });
+  };
 
-		return(
-			<div className="container">
-				<h2>using React and Redux</h2>
-				<div>Input 1: 
-					<input type="text" placeholder="Input 1" ref="input1"></input>
-				</div>
-				<div>Input 2 :
-					<input type="text" placeholder="Input 2" ref="input2"></input>
-				</div>
-				<div>Output :
-					<input type="text" placeholder="Output" readOnly ref="output" value={this.props.output}></input>
-				</div>
-				<div>
-					<button id="add" onClick={ () => {
-						IntegerA = parseInt(ReactDOM.findDOMNode(this.refs.input1).value)
-						IntegerB = parseInt(ReactDOM.findDOMNode(this.refs.input2).value)
-						IntegerC = IntegerA+IntegerB
+  addHandle = () => {
+    const { num1, num2 } = this.state;
+    this.props.addInputs(parseInt(num1) + parseInt(num2));
+  };
 
-						// console.log('A ' + IntegerA + ' B ' +IntegerB+ ' C ' +IntegerC)
-						
-						// ReactDOM.findDOMNode(this.refs.output).value = this.props.output
-						this.props.dispatch(addInputs(IntegerC))
+  subHandle = () => {
+    const { num1, num2 } = this.state;
+    this.props.subtractInputs(parseInt(num1) - parseInt(num2));
+  };
 
-					  }
-					}>Add</button>
-					
-					<button id="subtract" onClick={ () => {
-						IntegerA = parseInt(ReactDOM.findDOMNode(this.refs.input1).value)
-						IntegerB = parseInt(ReactDOM.findDOMNode(this.refs.input2).value)
-						IntegerC = IntegerA-IntegerB
+  addAsyncHandle = () => {
+    const { num1, num2 } = this.state;
+    this.props.async_addInputs(parseInt(num1) + parseInt(num2));
+  };
 
-						// console.log('A ' + IntegerA + ' B ' +IntegerB+ ' C ' +IntegerC)
-						
-						// ReactDOM.findDOMNode(this.refs.output).value = this.props.output
-						this.props.dispatch(subtractInputs(IntegerC))
-					  }
-					}>Subtract</button>
-				</div>
-				
-				<hr/>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className="container">
+        <h2>Калькулятор с react и redux</h2>
+        <input
+          type="text"
+          placeholder="Первое число"
+          onChange={e => this.changeHandle('num1', e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Второе число"
+          onChange={e => this.changeHandle('num2', e.target.value)}
+        />
+        <div>
+          Результаты : <span id="output">{this.props.output}</span>
+        </div>
+        <button id="add" onClick={this.addHandle}>Сложить</button>
+        <button id="subtract" onClick={this.subHandle}>Вычесть</button>
+        <button id="async_add" onClick={this.addAsyncHandle}>Сложить асинхронно</button>
+        <hr />
+      </div>
+    );
+  }
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps, {
+  addInputs,
+  subtractInputs,
+  async_addInputs
+})(Home);

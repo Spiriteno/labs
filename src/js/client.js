@@ -1,18 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {createStore} from 'redux'
-import {Provider} from 'react-redux'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk'
 
-import calculatorReducers from './reducers/calculatorReducers'
-import Layout from "./components/Layout";
+import calculatorReducers from './reducers/calculatorReducers';
+import Home from './components/Home';
 
-const app = document.getElementById('app')
-
-const store = createStore(calculatorReducers)
+const middlewares = applyMiddleware(thunk)
+const store = createStore(calculatorReducers, middlewares);
 
 ReactDOM.render(
-	<Provider store={store}>
-		<Layout/>
-	</Provider>
-	, app);
-
+  <Provider store={store}>
+    <Home />
+  </Provider>,
+  document.getElementById('app')
+);
