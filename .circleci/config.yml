@@ -1,0 +1,34 @@
+version: 2.1
+jobs:
+  install-deps:
+    docker:
+      - image: circleci/node:14.15
+      steps:
+        - checkout
+        - restore_cache:
+           keys: -v1-deps-{{ checksum "package-lock.json" }}
+  -run: npm install
+  - save_cache:
+    paths:
+      - node_modules
+      key: v1-deps-{{ checksum "package-lock.json" }}
+      - persist_to_workspace:
+        root: .
+        paths:
+          - "node_modules"
+    testing:
+      docker:
+        - image: circleci/node:14.15
+        steps:
+          - checkout
+          - attach_workspace:
+            at:
+              - run: npm run test
+              workflows:
+                  main:
+    jobs:
+      - install-deps
+      - testing
+        requires:
+          - install-deps
+
