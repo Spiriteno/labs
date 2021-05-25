@@ -16,14 +16,14 @@ jobs:
           root: .
           paths:
             - "node_modules"
-    testing:
-      docker:
-        - image: circleci/node:14.15
-      steps:
-        - checkout
-        - attach_workspace:
-          at: .
-        - run: yarn test
+  testing:
+    docker:
+      - image: circleci/node:14.15
+    steps:
+      - checkout
+      - attach_workspace:
+        at: .
+      - run: yarn test
 workflows:
     main:
       jobs:
