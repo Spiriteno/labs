@@ -3,32 +3,31 @@ jobs:
   install-deps:
     docker:
       - image: circleci/node:14.15
-      steps:
-        - checkout
-        - restore_cache:
-           keys: -v1-deps-{{ checksum "package-lock.json" }}
-  -run: npm install
-  - save_cache:
-    paths:
-      - node_modules
-      key: v1-deps-{{ checksum "package-lock.json" }}
+    steps:
+      - checkout
+      - restore_cache:
+         keys: -v1-deps-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-deps-{{ checksum "yarn.lock" }}
       - persist_to_workspace:
-        root: .
-        paths:
-          - "node_modules"
+          root: .
+          paths:
+            - "node_modules"
     testing:
       docker:
         - image: circleci/node:14.15
         steps:
           - checkout
           - attach_workspace:
-            at:
-              - run: npm run test
-              workflows:
-                  main:
-    jobs:
-      - install-deps
-      - testing
-        requires:
-          - install-deps
-
+            at: .
+          - run: yarn test
+workflows:
+    main:
+      jobs:
+        - install-deps
+        - testing:
+            requires:
+              - install-deps
