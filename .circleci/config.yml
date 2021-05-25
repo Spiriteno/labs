@@ -19,11 +19,11 @@ jobs:
     testing:
       docker:
         - image: circleci/node:14.15
-        steps:
-          - checkout
-          - attach_workspace:
-            at: .
-          - run: yarn test
+      steps:
+        - checkout
+        - attach_workspace:
+          at: .
+        - run: yarn test
 workflows:
     main:
       jobs:
