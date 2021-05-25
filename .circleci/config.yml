@@ -22,7 +22,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: .
+          at: .
       - run: yarn test
 workflows:
     main:
